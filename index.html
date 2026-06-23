@@ -4,19 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>積層日和 | あなたの「好き」に、とっておきの居場所を。</title>
-    <meta
-      name="description"
-      content="積層日和は、3Dプリンターで日常を彩る雑貨をつくる小さなブランドです。"
-    />
+    <meta name="description" content="積層日和は、3Dプリンターで日常を彩る雑貨をつくる小さなブランドです。" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Noto+Sans+JP:wght@300;400;500;600&family=Shippori+Mincho:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+
+    <!-- ── Header ──────────────────────────────────── -->
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="積層日和 ホーム">
         <span class="brand-ja">積層日和</span>
@@ -30,95 +26,121 @@
       </nav>
       <div class="header-actions">
         <a class="icon-link" href="https://www.instagram.com/sekisoubiyori/" target="_blank" rel="noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17.2" cy="6.8" r=".7"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"/>
+            <circle cx="12" cy="12" r="3.7"/>
+            <circle cx="17.2" cy="6.8" r=".7" fill="currentColor" stroke="none"/>
+          </svg>
         </a>
         <button class="cart-toggle" type="button" data-cart-open aria-label="カートを開く">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h14l-1.4 8.2a2 2 0 0 1-2 1.7H9.2a2 2 0 0 1-2-1.7L5.6 4.8H3"/><circle cx="9.5" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 7h14l-1.4 8.2a2 2 0 0 1-2 1.7H9.2a2 2 0 0 1-2-1.7L5.6 4.8H3"/>
+            <circle cx="9.5" cy="20" r="1"/>
+            <circle cx="17" cy="20" r="1"/>
+          </svg>
           <span data-cart-count>0</span>
         </button>
       </div>
     </header>
 
     <main id="top">
+
+      <!-- ── Hero ────────────────────────────────────── -->
       <section class="hero section-reveal">
         <div class="hero-copy">
           <p class="eyebrow">sekisoubiyori</p>
-          <h1>あなたの「好き」に、<br />とっておきの居場所を。</h1>
-          <p class="hero-lead">3Dプリンターで叶える、日常を彩る雑貨たち。</p>
+          <h1>好きなものには、<br />特等席を。</h1>
+          <p class="hero-lead">集めるほど好きなのに、なんとなく置いていませんか。<br />3Dプリンターでつくる、飾りたくなる日常雑貨。</p>
           <div class="hero-buttons">
             <a class="button primary" href="#products">商品を見る</a>
             <a class="button secondary" href="#about">ブランドについて</a>
           </div>
         </div>
         <div class="hero-visual" aria-label="積層日和の商品イメージ">
-          <div class="photo-card card-one">
-            <span class="visual-caption">masking tape stand</span>
-            <svg viewBox="0 0 420 520" role="img" aria-label="マステスタンドのイメージ">
-              <rect class="svg-bg" x="0" y="0" width="420" height="520" rx="34" />
-              <ellipse class="shadow" cx="210" cy="410" rx="120" ry="22" />
-              <path class="product-fill" d="M128 178c0-36 29-65 65-65h34c36 0 65 29 65 65v168H128z" />
-              <path class="product-line" d="M128 346h164M158 191h104M170 246h80" />
-              <circle class="tape tape-a" cx="162" cy="257" r="35" />
-              <circle class="tape tape-b" cx="222" cy="257" r="35" />
-              <circle class="tape-hole" cx="162" cy="257" r="14" />
-              <circle class="tape-hole" cx="222" cy="257" r="14" />
+          <!-- 3枚のカードが「積層」のメタファーで重なる -->
+          <div class="layer-card c-back" aria-hidden="true">
+            <svg viewBox="0 0 320 300" role="img" aria-label="商品イメージ背面">
+              <rect width="320" height="300" fill="#f7ede6"/>
+              <rect x="108" y="80" width="26" height="130" rx="13" fill="#edd9cd" stroke="#c5a08a" stroke-width="2"/>
+              <rect x="148" y="60" width="26" height="150" rx="13" fill="#e6d9ce" stroke="#c5a08a" stroke-width="2"/>
+              <rect x="188" y="95" width="26" height="115" rx="13" fill="#fff0e8" stroke="#c5a08a" stroke-width="2"/>
+              <rect x="88" y="210" width="144" height="14" rx="7" fill="#e8ddd4"/>
             </svg>
           </div>
-          <div class="photo-card card-two">
-            <span class="visual-caption">lip holder</span>
-            <svg viewBox="0 0 360 430" role="img" aria-label="リップホルダーのイメージ">
-              <rect class="svg-bg alt" width="360" height="430" rx="30" />
-              <ellipse class="shadow" cx="182" cy="330" rx="94" ry="18" />
-              <rect class="product-fill" x="102" y="224" width="160" height="95" rx="26" />
-              <rect class="product-soft" x="133" y="102" width="34" height="145" rx="17" />
-              <rect class="product-soft rose" x="194" y="72" width="34" height="175" rx="17" />
-              <path class="product-line" d="M126 270h112M150 247v72M211 247v72" />
+          <div class="layer-card c-mid">
+            <svg viewBox="0 0 320 300" role="img" aria-label="マステスタンドのイメージ">
+              <rect width="320" height="300" fill="#f5ece3"/>
+              <ellipse cx="160" cy="234" rx="84" ry="14" fill="rgba(119,87,67,.1)"/>
+              <path d="M98 105c0-28 23-51 51-51h22c28 0 51 23 51 51v109H98z" fill="#fff8f2" stroke="#b99a86" stroke-width="2.5"/>
+              <circle cx="134" cy="152" r="26" fill="#edd9cd" stroke="#b99a86" stroke-width="2"/>
+              <circle cx="186" cy="152" r="26" fill="#e6e0d2" stroke="#b99a86" stroke-width="2"/>
+              <circle cx="134" cy="152" r="10" fill="#fffdfb"/>
+              <circle cx="186" cy="152" r="10" fill="#fffdfb"/>
+              <path d="M118 213h84M124 98h72" stroke="#b99a86" stroke-width="2.5" stroke-linecap="round" fill="none"/>
             </svg>
+            <span class="layer-label">masking tape stand</span>
+          </div>
+          <div class="layer-card c-front">
+            <svg viewBox="0 0 320 300" role="img" aria-label="リップホルダーのイメージ">
+              <rect width="320" height="300" fill="#f9f1eb"/>
+              <ellipse cx="160" cy="234" rx="84" ry="14" fill="rgba(119,87,67,.1)"/>
+              <rect x="92" y="178" width="136" height="58" rx="22" fill="#fff8f2" stroke="#b99a86" stroke-width="2.5"/>
+              <rect x="118" y="86" width="28" height="116" rx="14" fill="#faf8f5" stroke="#b99a86" stroke-width="2.5"/>
+              <rect x="174" y="62" width="28" height="140" rx="14" fill="#edd9cd" stroke="#b99a86" stroke-width="2.5"/>
+              <path d="M114 207h92M138 181v54M183 181v54" stroke="#b99a86" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+            <span class="layer-label">lip holder</span>
           </div>
         </div>
       </section>
 
+      <!-- ── About ────────────────────────────────────── -->
       <section class="about section-reveal" id="about">
-        <div class="section-heading">
+        <div class="section-header">
           <p class="eyebrow">About</p>
-          <h2>積み重ねる日々に、小さな特等席を。</h2>
+          <h2>「好きで買ったのに、<br />なんとなく置いてた」を変えたくて。</h2>
         </div>
         <div class="about-grid">
-          <article>
-            <span>01</span>
-            <h3>ブランドに込めた想い</h3>
-            <p>日々の積み重ねが、ふとした良い日をつくる。3Dプリンターの「積層」と、暮らしの「積み重ね」を重ねて、積層日和は生まれました。</p>
+          <article class="about-card">
+            <span class="about-num">i</span>
+            <h3>積み重ねが、良い日をつくる</h3>
+            <p>ふと手に取ったもの、目に入った景色。そういう小さなことが積み重なって、「今日はいい日だったな」と思える夜になる。積層日和はそんな日常の積み重ねを、もっと丁寧にしたくて生まれました。</p>
           </article>
-          <article>
-            <span>02</span>
-            <h3>「好き」の特等席</h3>
-            <p>集めたマスキングテープ、毎日使うリップ、お気に入りのリング。好きなものに美しい置き場所をつくる、飾りたくなる雑貨を提案します。</p>
+          <article class="about-card">
+            <span class="about-num">ii</span>
+            <h3>好きなものほど、迷子になる</h3>
+            <p>マスキングテープ、リップ、リング——増えるほど好きなのに、どこか「とりあえず置き」になっていませんか。積層日和は、大切なものに「ここが特等席」と決まる場所をつくります。</p>
           </article>
-          <article>
-            <span>03</span>
-            <h3>3Dプリンターが拓く形</h3>
-            <p>機械設計の視点と3Dプリントの自由さを合わせ、素材の質感、手触り、光の当たり方まで丁寧に考えたものづくりを大切にしています。</p>
+          <article class="about-card">
+            <span class="about-num">iii</span>
+            <h3>機械設計の目で、形を考える</h3>
+            <p>長年の機械設計の経験と3Dプリンターを組み合わせ、素材の質感・手触り・光の当たり方まで計算してデザインしています。使いやすさと、置いただけで気分が上がる見た目を両立させるために。</p>
           </article>
         </div>
       </section>
 
+      <!-- ── Concept ───────────────────────────────────── -->
       <section class="concept section-reveal" id="concept">
-        <div class="concept-image" aria-hidden="true">
-          <div class="shelf">
-            <span></span><span></span><span></span>
+        <div class="concept-visual" aria-hidden="true">
+          <div class="shelf-items">
+            <div class="shelf-item si-a"></div>
+            <div class="shelf-item si-b"></div>
+            <div class="shelf-item si-c"></div>
           </div>
+          <div class="shelf-base"></div>
         </div>
         <div class="concept-copy">
           <p class="eyebrow">Concept</p>
-          <h2>機能だけではなく、置いた瞬間にうれしくなるものを。</h2>
-          <p>積層日和の雑貨は、収納用品でありながら、好きなものを眺める時間までデザインします。余白のある形、やわらかな色、手に取ったときの軽やかさ。日常の小さな景色を、少しだけ特別に整えます。</p>
+          <h2>しまうためじゃなく、<br />飾るために置く。</h2>
+          <p>収納グッズを買うたびに思っていました。「なんで機能的なものって、かわいくないんだろう」と。積層日和がつくるのは、しまった瞬間よりも、出している時間の方が好きになれるもの。手に取るたびに、少しだけ気分が上がる。そういう雑貨を、一つひとつ丁寧に設計しています。</p>
         </div>
       </section>
 
+      <!-- ── Products ──────────────────────────────────── -->
       <section class="products section-reveal" id="products">
-        <div class="section-heading">
+        <div class="section-header">
           <p class="eyebrow">Products</p>
-          <h2>お気に入りを迎えるための雑貨</h2>
+          <h2>あなたの「好き」の、特等席。</h2>
         </div>
         <div class="filter-bar" role="tablist" aria-label="商品カテゴリ">
           <button class="filter-button active" type="button" data-filter="all">すべて</button>
@@ -129,45 +151,49 @@
         <div class="product-grid" data-products></div>
       </section>
 
+      <!-- ── Reviews ───────────────────────────────────── -->
       <section class="reviews section-reveal">
-        <div class="section-heading">
+        <div class="section-header">
           <p class="eyebrow">Review</p>
-          <h2>小さな景色が変わった声</h2>
+          <h2>届いた声</h2>
         </div>
         <div class="review-grid">
-          <article>
+          <article class="review-card">
             <div class="stars" aria-label="5つ星">★★★★★</div>
-            <p>マステを選ぶ時間まで楽しくなりました。置きっぱなしでもかわいいのがうれしいです。</p>
-            <span>マステスタンド / yuiさん</span>
+            <p>マステをどんどん増やしてしまうタイプなのですが、スタンドに並べたら選ぶのが楽しくなって、むしろ使う頻度が上がりました。机の上に出しっぱなしでもかわいいのが最高です。</p>
+            <span>マステの特等席スタンド / yuiさん</span>
           </article>
-          <article>
+          <article class="review-card">
             <div class="stars" aria-label="5つ星">★★★★★</div>
-            <p>リップが迷子にならなくなって、朝の支度が少し穏やかになりました。</p>
-            <span>リップホルダー / mikaさん</span>
+            <p>朝、リップをカバンの中で探すのが地味なストレスだったんですが、ホルダーを置いたらそれがなくなりました。ちゃんとした居場所を作るだけで、こんなに変わるんだと驚いています。</p>
+            <span>リップの小さな居場所 / mikaさん</span>
           </article>
-          <article>
+          <article class="review-card">
             <div class="stars" aria-label="5つ星">★★★★★</div>
-            <p>リングを外した瞬間の置き場所があるだけで、机の上がちゃんと整います。</p>
+            <p>リングを外すたびにとりあえず置き場所を探していたのですが、これを置いてから「ここに戻す」が習慣になりました。小さいのに存在感があって、眺めているだけで気分が上がります。</p>
             <span>リングレスト / naoさん</span>
           </article>
         </div>
       </section>
 
+      <!-- ── Instagram ─────────────────────────────────── -->
       <section class="instagram section-reveal" aria-labelledby="instagram-title">
-        <div>
+        <div class="instagram-copy">
           <p class="eyebrow">Instagram</p>
           <h2 id="instagram-title">@sekisoubiyori</h2>
           <a class="text-link" href="https://www.instagram.com/sekisoubiyori/" target="_blank" rel="noreferrer">フォローする</a>
         </div>
         <div class="insta-grid" aria-label="Instagram投稿イメージ">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
         </div>
       </section>
 
+      <!-- ── Contact ───────────────────────────────────── -->
       <section class="contact section-reveal" id="contact">
-        <div class="section-heading">
+        <div class="section-header">
           <p class="eyebrow">Contact</p>
-          <h2>商品やオーダーのご相談</h2>
+          <h2>気になることがあれば、<br />気軽にどうぞ。</h2>
         </div>
         <form class="contact-form" data-contact-form>
           <label>
@@ -188,14 +214,16 @@
           </label>
           <label class="wide">
             お問い合わせ内容
-            <textarea name="message" rows="6" required></textarea>
+            <textarea name="message" rows="5" required></textarea>
           </label>
           <button class="button primary" type="submit">送信する</button>
           <p class="form-note" data-contact-note>送信機能は現在デモです。公開時はフォームサービス等に接続します。</p>
         </form>
       </section>
+
     </main>
 
+    <!-- ── Footer ───────────────────────────────────── -->
     <footer class="site-footer">
       <div>
         <a class="brand footer-brand" href="#top">
@@ -217,6 +245,7 @@
       </div>
     </footer>
 
+    <!-- ── Product modal ─────────────────────────────── -->
     <div class="modal-backdrop" data-modal hidden>
       <article class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button class="close-button" type="button" data-modal-close aria-label="閉じる">×</button>
@@ -241,6 +270,7 @@
       </article>
     </div>
 
+    <!-- ── Cart drawer ───────────────────────────────── -->
     <aside class="cart-drawer" data-cart aria-label="カート" aria-hidden="true">
       <div class="cart-head">
         <h2>Cart</h2>
@@ -272,7 +302,7 @@
           </select>
         </div>
         <button class="button primary full" type="submit">購入手続きへ進む</button>
-        <p class="form-note" data-checkout-note>現在はデモ決済です。実運用ではShopify等の決済に接続します。</p>
+        <p class="form-note" data-checkout-note>現在はデモ決済です。実運用ではStripeの決済に接続します。</p>
       </form>
     </aside>
     <div class="scrim" data-scrim hidden></div>
