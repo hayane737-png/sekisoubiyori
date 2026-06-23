@@ -194,9 +194,38 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-/* ── cart drawer ── */
+/* ── cart drawer & steps ── */
 function openCart()  { cartDrawer.classList.add("open"); cartDrawer.setAttribute("aria-hidden","false"); scrim.hidden = false; }
-function closeCart() { cartDrawer.classList.remove("open"); cartDrawer.setAttribute("aria-hidden","true"); scrim.hidden = true; }
+function closeCart() { cartDrawer.classList.remove("open"); cartDrawer.setAttribute("aria-hidden","true"); scrim.hidden = true; showStep(1); }
+
+function showStep(n) {
+  document.querySelectorAll("[data-cart-step]").forEach((el) => {
+    el.hidden = el.dataset.cartStep !== String(n);
+  });
+}
+
+function renderConfirm() {
+  const items = cart
+    .map((e) => ({ ...e, product: products.find((p) => p.id === e.id) }))
+    .filter((e) => e.product);
+  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
+  const discount = couponApplied && subtotal > 0 ? Math.round(subtotal * 0.1) : 0;
+  const shipping = subtotal - discount >= 5000 || subtotal === 0 ? 0 : 300;
+  const total    = subtotal - discount + shipping;
+
+  document.querySelector("[data-confirm-subtotal]").textContent = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
+  document.querySelector("[data-confirm-shipping]").textContent = yen(shipping);
+  document.querySelector("[data-confirm-total]").textContent    = yen(total);
+  document.querySelector("[data-confirm-items]").innerHTML = items.map((item) => `
+    <div class="cart-item confirm-item">
+      <div class="cart-thumb">${art(item.product.shape)}</div>
+      <div>
+        <h3>${item.product.name}</h3>
+        <p>${yen(item.product.price)} × ${item.quantity}点</p>
+      </div>
+      <strong style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose);white-space:nowrap">${yen(item.product.price * item.quantity)}</strong>
+    </div>`).join("");
+}
 
 /* ── event delegation ── */
 document.addEventListener("click", (e) => {
@@ -218,6 +247,14 @@ document.addEventListener("click", (e) => {
     couponApplied = inp.value.trim().toUpperCase() === "SEKISO10";
     inp.value = couponApplied ? "SEKISO10" : "";
     renderCart();
+  }
+  if (t.matches("[data-go-checkout]")) {
+    if (!cart.length) return;
+    renderConfirm();
+    showStep(2);
+  }
+  if (t.matches("[data-back-cart]")) {
+    showStep(1);
   }
 });
 

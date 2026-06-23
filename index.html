@@ -272,38 +272,63 @@
 
     <!-- ── Cart drawer ───────────────────────────────── -->
     <aside class="cart-drawer" data-cart aria-label="カート" aria-hidden="true">
-      <div class="cart-head">
-        <h2>Cart</h2>
-        <button type="button" data-cart-close aria-label="カートを閉じる">×</button>
-      </div>
-      <div class="cart-items" data-cart-items></div>
-      <form class="checkout-form" data-checkout-form>
-        <label>
-          クーポンコード
-          <div class="coupon-row">
-            <input type="text" name="coupon" placeholder="SEKISO10" />
-            <button type="button" data-apply-coupon>適用</button>
+
+      <!-- ステップ1: カート -->
+      <div class="cart-step" data-cart-step="1">
+        <div class="cart-head">
+          <h2>Cart</h2>
+          <button type="button" data-cart-close aria-label="カートを閉じる">×</button>
+        </div>
+        <div class="cart-items" data-cart-items></div>
+        <div class="checkout-form">
+          <label>
+            クーポンコード
+            <div class="coupon-row">
+              <input type="text" name="coupon" placeholder="SEKISO10" />
+              <button type="button" data-apply-coupon>適用</button>
+            </div>
+          </label>
+          <div class="cart-summary">
+            <div><span>小計</span><strong data-cart-subtotal>¥0</strong></div>
+            <div><span>送料</span><strong data-cart-shipping>¥300</strong></div>
+            <div class="total"><span>合計</span><strong data-cart-total>¥0</strong></div>
           </div>
-        </label>
-        <div class="cart-summary">
-          <div><span>小計</span><strong data-cart-subtotal>¥0</strong></div>
-          <div><span>送料</span><strong data-cart-shipping>¥300</strong></div>
-          <div class="total"><span>合計</span><strong data-cart-total>¥0</strong></div>
+          <button class="button primary full" type="button" data-go-checkout>購入手続きへ進む</button>
+          <button class="button secondary full" type="button" data-cart-close style="margin-top:4px">買い物を続ける</button>
         </div>
-        <div class="checkout-fields">
-          <input type="text" name="fullName" placeholder="お名前" required />
-          <input type="text" name="postal" placeholder="郵便番号" required />
-          <input type="text" name="address" placeholder="住所" required />
-          <input type="tel" name="phone" placeholder="電話番号" required />
-          <select name="payment">
-            <option>クレジットカード</option>
-            <option>PayPay</option>
-            <option>銀行振込</option>
-          </select>
+      </div>
+
+      <!-- ステップ2: 注文確認 & 配送情報入力 -->
+      <div class="cart-step" data-cart-step="2" hidden>
+        <div class="cart-head">
+          <h2>確認 · Confirm</h2>
+          <button type="button" data-cart-close aria-label="カートを閉じる">×</button>
         </div>
-        <button class="button primary full" type="submit">購入手続きへ進む</button>
-        <p class="form-note" data-checkout-note>現在はデモ決済です。実運用ではStripeの決済に接続します。</p>
-      </form>
+        <!-- 注文内容サマリー（カート内商品を再表示） -->
+        <div class="confirm-items" data-confirm-items></div>
+        <form class="checkout-form" data-checkout-form>
+          <div class="cart-summary">
+            <div><span>小計</span><strong data-confirm-subtotal>¥0</strong></div>
+            <div><span>送料</span><strong data-confirm-shipping>¥300</strong></div>
+            <div class="total"><span>合計</span><strong data-confirm-total>¥0</strong></div>
+          </div>
+          <div class="checkout-fields">
+            <input type="text" name="fullName" placeholder="お名前" required />
+            <input type="text" name="postal" placeholder="郵便番号" required />
+            <input type="text" name="address" placeholder="住所" required />
+            <input type="tel" name="phone" placeholder="電話番号" required />
+            <select name="payment">
+              <option>クレジットカード</option>
+              <option>PayPay</option>
+              <option>銀行振込</option>
+            </select>
+          </div>
+          <button class="button primary full" type="submit">購入を確定する</button>
+          <button class="button secondary full" type="button" data-back-cart style="margin-top:4px">← カートに戻る</button>
+          <p class="form-note" data-checkout-note>現在はデモ決済です。実運用ではStripeの決済に接続します。</p>
+        </form>
+      </div>
+
     </aside>
     <div class="scrim" data-scrim hidden></div>
 
