@@ -195,16 +195,47 @@ function closeModal() {
 }
 
 /* ── cart drawer & steps ── */
-function openCart()  { cartDrawer.classList.add("open"); cartDrawer.setAttribute("aria-hidden","false"); scrim.hidden = false; }
-function closeCart() { cartDrawer.classList.remove("open"); cartDrawer.setAttribute("aria-hidden","true"); scrim.hidden = true; showStep(1); }
+let memberData = null; // 入力済み会員情報を保持
+
+function openCart()  {
+  cartDrawer.classList.add("open");
+  cartDrawer.setAttribute("aria-hidden","false");
+  scrim.hidden = false;
+}
+function closeCart() {
+  cartDrawer.classList.remove("open");
+  cartDrawer.setAttribute("aria-hidden","true");
+  scrim.hidden = true;
+  // 完了画面から閉じた場合はステップ1に戻してカートをリセット
+  setTimeout(() => {
+    const current = cartDrawer.querySelector("[data-cart-step]:not([hidden])");
+    if (current && current.dataset.cartStep === "4") {
+      cart = [];
+      memberData = null;
+      saveCart();
+      renderCart();
+    }
+    showStep(1);
+  }, 300);
+}
 
 function showStep(n) {
   document.querySelectorAll("[data-cart-step]").forEach((el) => {
     el.hidden = el.dataset.cartStep !== String(n);
   });
+  // インジケーター更新
+  document.querySelectorAll(".step-dot").forEach((dot) => {
+    const s = parseInt(dot.dataset.step);
+    dot.classList.remove("active", "done");
+    if (s === n) dot.classList.add("active");
+    else if (s < n) dot.classList.add("done");
+  });
+  // ステップ4（完了）はインジケーター非表示
+  const indicator = document.querySelector("[data-step-indicator]");
+  if (indicator) indicator.hidden = n === 4;
 }
 
-function renderConfirm() {
+function calcTotals() {
   const items = cart
     .map((e) => ({ ...e, product: products.find((p) => p.id === e.id) }))
     .filter((e) => e.product);
@@ -212,10 +243,13 @@ function renderConfirm() {
   const discount = couponApplied && subtotal > 0 ? Math.round(subtotal * 0.1) : 0;
   const shipping = subtotal - discount >= 5000 || subtotal === 0 ? 0 : 300;
   const total    = subtotal - discount + shipping;
+  return { items, subtotal, discount, shipping, total };
+}
 
-  document.querySelector("[data-confirm-subtotal]").textContent = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
-  document.querySelector("[data-confirm-shipping]").textContent = yen(shipping);
-  document.querySelector("[data-confirm-total]").textContent    = yen(total);
+function renderConfirmStep() {
+  const { items, subtotal, discount, shipping, total } = calcTotals();
+
+  // 商品一覧
   document.querySelector("[data-confirm-items]").innerHTML = items.map((item) => `
     <div class="cart-item confirm-item">
       <div class="cart-thumb">${art(item.product.shape)}</div>
@@ -223,8 +257,26 @@ function renderConfirm() {
         <h3>${item.product.name}</h3>
         <p>${yen(item.product.price)} × ${item.quantity}点</p>
       </div>
-      <strong style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--rose);white-space:nowrap">${yen(item.product.price * item.quantity)}</strong>
+      <strong>${yen(item.product.price * item.quantity)}</strong>
     </div>`).join("");
+
+  // 合計
+  document.querySelector("[data-confirm-subtotal]").textContent = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
+  document.querySelector("[data-confirm-shipping]").textContent = yen(shipping);
+  document.querySelector("[data-confirm-total]").textContent    = yen(total);
+
+  // 会員情報サマリー
+  if (memberData) {
+    const payLabel = { card:"クレジットカード", paypay:"PayPay", bank:"銀行振込" };
+    document.querySelector("[data-confirm-info]").innerHTML = `
+      <strong>お届け先・お支払い</strong>
+      ${memberData.fullName} 様<br>
+      〒${memberData.postal} ${memberData.address}${memberData.address2 ? ' ' + memberData.address2 : ''}<br>
+      ${memberData.phone}<br>
+      ${memberData.email}<br>
+      お支払い: ${payLabel[memberData.payment] || memberData.payment}
+    `;
+  }
 }
 
 /* ── event delegation ── */
@@ -232,30 +284,52 @@ document.addEventListener("click", (e) => {
   if (e.target.matches("[data-scrim]")) { closeCart(); return; }
   const t = e.target.closest("button, a");
   if (!t) return;
-  if (t.matches("[data-add]"))        addToCart(t.dataset.add);
-  if (t.matches("[data-detail]"))     openModal(t.dataset.detail);
-  if (t.matches("[data-cart-open]"))  openCart();
-  if (t.matches("[data-cart-close]")) closeCart();
-  if (t.matches("[data-modal-close]"))closeModal();
+
+  if (t.matches("[data-add]"))         addToCart(t.dataset.add);
+  if (t.matches("[data-detail]"))      openModal(t.dataset.detail);
+  if (t.matches("[data-cart-open]"))   openCart();
+  if (t.matches("[data-cart-close]"))  closeCart();
+  if (t.matches("[data-modal-close]")) closeModal();
   if (t.matches("[data-modal-add]") && modalProduct) { addToCart(modalProduct.id, modalQty); closeModal(); }
-  if (t.matches("[data-qty-minus]"))  { modalQty = Math.max(1, modalQty - 1); document.querySelector("[data-modal-qty]").textContent = modalQty; }
-  if (t.matches("[data-qty-plus]"))   { modalQty++; document.querySelector("[data-modal-qty]").textContent = modalQty; }
-  if (t.matches("[data-cart-dec]"))   updateQuantity(t.dataset.cartDec, -1);
-  if (t.matches("[data-cart-inc]"))   updateQuantity(t.dataset.cartInc, 1);
+  if (t.matches("[data-qty-minus]"))   { modalQty = Math.max(1, modalQty - 1); document.querySelector("[data-modal-qty]").textContent = modalQty; }
+  if (t.matches("[data-qty-plus]"))    { modalQty++; document.querySelector("[data-modal-qty]").textContent = modalQty; }
+  if (t.matches("[data-cart-dec]"))    updateQuantity(t.dataset.cartDec, -1);
+  if (t.matches("[data-cart-inc]"))    updateQuantity(t.dataset.cartInc, 1);
+
+  // クーポン
   if (t.matches("[data-apply-coupon]")) {
     const inp = document.querySelector('input[name="coupon"]');
     couponApplied = inp.value.trim().toUpperCase() === "SEKISO10";
     inp.value = couponApplied ? "SEKISO10" : "";
     renderCart();
   }
-  if (t.matches("[data-go-checkout]")) {
-    if (!cart.length) return;
-    renderConfirm();
-    showStep(2);
+
+  // ステップ移動ボタン（data-go-step="N"）
+  if (t.dataset.goStep) {
+    const n = parseInt(t.dataset.goStep);
+    if (n === 2 && !cart.length) return; // カートが空なら進まない
+    showStep(n);
   }
-  if (t.matches("[data-back-cart]")) {
-    showStep(1);
+
+  // 登録済み会員→ステップ2をスキップ
+  if (t.matches("[data-skip-member]")) {
+    renderConfirmStep();
+    showStep(3);
   }
+
+  // 購入確定
+  if (t.matches("[data-place-order]")) {
+    showStep(4);
+  }
+});
+
+// ステップ2フォーム送信→ステップ3へ
+document.querySelector("[data-member-form]").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.currentTarget);
+  memberData = Object.fromEntries(fd.entries());
+  renderConfirmStep();
+  showStep(3);
 });
 
 document.querySelectorAll("[data-filter]").forEach((btn) => {
@@ -264,13 +338,6 @@ document.querySelectorAll("[data-filter]").forEach((btn) => {
     btn.classList.add("active");
     renderProducts(btn.dataset.filter);
   });
-});
-
-document.querySelector("[data-checkout-form]").addEventListener("submit", (e) => {
-  e.preventDefault();
-  document.querySelector("[data-checkout-note]").textContent = cart.length
-    ? "デモ注文を受け付けました。実運用では決済完了後に確認メールを送信します。"
-    : "カートに商品を追加してください。";
 });
 
 document.querySelector("[data-contact-form]").addEventListener("submit", (e) => {
