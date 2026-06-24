@@ -249,12 +249,11 @@ details p { font-size: 13px; color: var(--mist); margin-top: 10px; line-height: 
 
 /* ── Cart drawer ── */
 .cart-drawer {
-  position: fixed; z-index: 300; top: 0; right: 0;
+  position: fixed; z-index: 300;
+  top: 0; right: 0; bottom: 0; /* heightではなくbottom:0で高さを決定 */
   width: min(540px, 100vw);
-  height: 100vh;    /* フォールバック */
-  height: 100dvh;   /* モバイル対応 */
   display: grid;
-  grid-template-rows: auto 1fr; /* インジケーター + ステップ */
+  grid-template-rows: auto 1fr;
   background: var(--milk);
   box-shadow: -24px 0 64px rgba(46,42,38,.14);
   transform: translateX(105%);
@@ -326,7 +325,7 @@ details p { font-size: 13px; color: var(--mist); margin-top: 10px; line-height: 
 
 .cart-footer {
   flex-shrink: 0;
-  padding: 12px 24px 16px;
+  padding: 12px 24px 32px; /* 下を多めに開ける */
   display: flex; flex-direction: column; gap: 8px;
   border-top: 1px solid var(--line);
   background: var(--milk);
