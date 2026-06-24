@@ -250,8 +250,9 @@ details p { font-size: 13px; color: var(--mist); margin-top: 10px; line-height: 
 /* ── Cart drawer ── */
 .cart-drawer {
   position: fixed; z-index: 300;
-  top: 0; right: 0; bottom: 0; /* heightではなくbottom:0で高さを決定 */
+  top: 0; right: 0;
   width: min(540px, 100vw);
+  height: 100vh; /* JSで上書きされる */
   display: grid;
   grid-template-rows: auto 1fr;
   background: var(--milk);

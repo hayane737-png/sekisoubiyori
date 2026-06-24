@@ -269,5 +269,12 @@ requestAnimationFrame(() => {
   });
 });
 
+// タスクバーがある環境でもカートが正しく表示されるよう
+// ウィンドウの実際の高さをCSS変数にセットする
+function setCartHeight() {
+  document.querySelector(".cart-drawer").style.height = window.innerHeight + "px";
+}
+setCartHeight();
+window.addEventListener("resize", setCartHeight);
 renderProducts();
 renderCart();
