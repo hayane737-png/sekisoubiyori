@@ -1,82 +1,13 @@
-const products = [
-  {
-    id: "tape-stand",
-    name: "マステの特等席スタンド",
-    category: "tape",
-    categoryLabel: "マステ周り",
-    description: "お気に入りのマスキングテープを、選びやすく飾れるスタンド。",
-    detail: "横並びでも積み重ねてもかわいく見える高さに整えました。机の上や棚に置いたとき、柄が自然に目に入る角度です。",
-    price: 1800,
-    colors: ["#fff8f2", "#edd9cd", "#e6e0d2"],
-    shape: "tape",
-    soldOut: false,
-  },
-  {
-    id: "lip-holder",
-    name: "リップの小さな居場所",
-    category: "lip",
-    categoryLabel: "リップ周り",
-    description: "毎日使うリップを、一本ずつきれいに立てておけるホルダー。",
-    detail: "朝の支度で手に取りやすく、置いたままでも生活感が出にくい丸みのある形。洗面台にもデスクにもなじみます。",
-    price: 1400,
-    colors: ["#faf8f5", "#edd9cd", "#c5957a"],
-    shape: "lip",
-    soldOut: false,
-  },
-  {
-    id: "ring-rest",
-    name: "リングレスト",
-    category: "accessory",
-    categoryLabel: "アクセサリー周り",
-    description: "外したリングをそっと預けられる、小さな台座。",
-    detail: "指輪のカーブに沿うように、やわらかな傾斜をつけました。玄関やベッドサイドの定位置づくりに。",
-    price: 1200,
-    colors: ["#fffdfb", "#f0ede6", "#edd9cd"],
-    shape: "ring",
-    soldOut: false,
-  },
-  {
-    id: "mini-tray",
-    name: "余白のミニトレイ",
-    category: "accessory",
-    categoryLabel: "アクセサリー周り",
-    description: "ピアスやヘアピンをまとめる、浅めのアクセサリートレイ。",
-    detail: "底面のゆるやかな凹みで、小物が散らばりにくい設計。白背景の写真にも合う静かな佇まいです。",
-    price: 1600,
-    colors: ["#faf8f5", "#e6e0d2", "#edd9cd"],
-    shape: "tray",
-    soldOut: false,
-  },
-  {
-    id: "tape-tower",
-    name: "マステタワー",
-    category: "tape",
-    categoryLabel: "マステ周り",
-    description: "縦に重ねて飾れる、コレクション向けのマステ収納。",
-    detail: "省スペースでも柄が見えるように、柱の太さと台座の安定感を調整しました。複数色で組み合わせても楽しめます。",
-    price: 2200,
-    colors: ["#fff8f2", "#edd9cd", "#c5957a"],
-    shape: "tower",
-    soldOut: true,
-  },
-  {
-    id: "brush-cup",
-    name: "ブラシとリップのカップ",
-    category: "lip",
-    categoryLabel: "リップ周り",
-    description: "リップ、細いブラシ、ペンをまとめられる軽やかなカップ。",
-    detail: "縁を薄く、底を少し重めに。見た目は繊細でも倒れにくいバランスを目指しました。",
-    price: 1900,
-    colors: ["#faf8f5", "#f0ede6", "#edd9cd"],
-    shape: "cup",
-    soldOut: false,
-  },
-];
+// =============================================
+// 積層日和 — script.js
+// カート・モーダル・フィルター・アニメーション
+// =============================================
 
 let cart = JSON.parse(localStorage.getItem("sekisoubiyori-cart") || "[]");
 let modalProduct = null;
 let modalQty = 1;
 let couponApplied = false;
+let memberData = null;
 
 const yen = (v) => `¥${v.toLocaleString("ja-JP")}`;
 
@@ -99,7 +30,7 @@ const productGrid = document.querySelector("[data-products]");
 const cartDrawer  = document.querySelector("[data-cart]");
 const scrim       = document.querySelector("[data-scrim]");
 
-/* ── render products ── */
+/* ── 商品一覧 ── */
 function renderProducts(filter = "all") {
   productGrid.innerHTML = products
     .filter((p) => filter === "all" || p.category === filter)
@@ -123,7 +54,7 @@ function renderProducts(filter = "all") {
       </article>`).join("");
 }
 
-/* ── cart ── */
+/* ── カート ── */
 function saveCart() { localStorage.setItem("sekisoubiyori-cart", JSON.stringify(cart)); }
 
 function addToCart(id, qty = 1) {
@@ -142,99 +73,6 @@ function updateQuantity(id, delta) {
   saveCart(); renderCart();
 }
 
-function renderCart() {
-  const items = cart
-    .map((e) => ({ ...e, product: products.find((p) => p.id === e.id) }))
-    .filter((e) => e.product);
-  const count    = items.reduce((s, i) => s + i.quantity, 0);
-  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
-  const discount = couponApplied && subtotal > 0 ? Math.round(subtotal * 0.1) : 0;
-  const shipping = subtotal - discount >= 5000 || subtotal === 0 ? 0 : 300;
-  const total    = subtotal - discount + shipping;
-
-  document.querySelector("[data-cart-count]").textContent     = count;
-  document.querySelector("[data-cart-subtotal]").textContent  = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
-  document.querySelector("[data-cart-shipping]").textContent  = yen(shipping);
-  document.querySelector("[data-cart-total]").textContent     = yen(total);
-  document.querySelector("[data-cart-items]").innerHTML = items.length
-    ? items.map((item) => `
-        <div class="cart-item">
-          <div class="cart-thumb">${art(item.product.shape)}</div>
-          <div>
-            <h3>${item.product.name}</h3>
-            <p>${yen(item.product.price)} × ${item.quantity}点</p>
-          </div>
-          <div class="item-controls">
-            <button type="button" data-cart-dec="${item.id}" aria-label="減らす">−</button>
-            <span>${item.quantity}</span>
-            <button type="button" data-cart-inc="${item.id}" aria-label="増やす">＋</button>
-          </div>
-        </div>`).join("")
-    : `<p class="form-note" style="padding:20px 0">カートは空です。お気に入りの居場所を探してみてください。</p>`;
-}
-
-/* ── modal ── */
-function openModal(id) {
-  modalProduct = products.find((p) => p.id === id);
-  if (!modalProduct) return;
-  modalQty = 1;
-  document.querySelector("[data-modal-art]").innerHTML          = art(modalProduct.shape);
-  document.querySelector("[data-modal-category]").textContent   = modalProduct.categoryLabel;
-  document.querySelector("[data-modal-name]").textContent       = modalProduct.name;
-  document.querySelector("[data-modal-price]").textContent      = yen(modalProduct.price);
-  document.querySelector("[data-modal-description]").textContent= modalProduct.detail;
-  document.querySelector("[data-modal-qty]").textContent        = modalQty;
-  document.querySelector("[data-modal-colors]").innerHTML       = modalProduct.colors
-    .map((c) => `<span class="color-chip" style="background:${c}" title="${c}"></span>`).join("");
-  document.querySelector("[data-modal]").hidden = false;
-  document.body.style.overflow = "hidden";
-}
-function closeModal() {
-  document.querySelector("[data-modal]").hidden = true;
-  document.body.style.overflow = "";
-}
-
-/* ── cart drawer & steps ── */
-let memberData = null; // 入力済み会員情報を保持
-
-function openCart()  {
-  cartDrawer.classList.add("open");
-  cartDrawer.setAttribute("aria-hidden","false");
-  scrim.hidden = false;
-}
-function closeCart() {
-  cartDrawer.classList.remove("open");
-  cartDrawer.setAttribute("aria-hidden","true");
-  scrim.hidden = true;
-  // 完了画面から閉じた場合はステップ1に戻してカートをリセット
-  setTimeout(() => {
-    const current = cartDrawer.querySelector("[data-cart-step]:not([hidden])");
-    if (current && current.dataset.cartStep === "4") {
-      cart = [];
-      memberData = null;
-      saveCart();
-      renderCart();
-    }
-    showStep(1);
-  }, 300);
-}
-
-function showStep(n) {
-  document.querySelectorAll("[data-cart-step]").forEach((el) => {
-    el.hidden = el.dataset.cartStep !== String(n);
-  });
-  // インジケーター更新
-  document.querySelectorAll(".step-dot").forEach((dot) => {
-    const s = parseInt(dot.dataset.step);
-    dot.classList.remove("active", "done");
-    if (s === n) dot.classList.add("active");
-    else if (s < n) dot.classList.add("done");
-  });
-  // ステップ4（完了）はインジケーター非表示
-  const indicator = document.querySelector("[data-step-indicator]");
-  if (indicator) indicator.hidden = n === 4;
-}
-
 function calcTotals() {
   const items = cart
     .map((e) => ({ ...e, product: products.find((p) => p.id === e.id) }))
@@ -246,45 +84,111 @@ function calcTotals() {
   return { items, subtotal, discount, shipping, total };
 }
 
+function renderCart() {
+  const { items, subtotal, discount, shipping, total } = calcTotals();
+  const count = items.reduce((s, i) => s + i.quantity, 0);
+  document.querySelector("[data-cart-count]").textContent    = count;
+  document.querySelector("[data-cart-subtotal]").textContent = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
+  document.querySelector("[data-cart-shipping]").textContent = yen(shipping);
+  document.querySelector("[data-cart-total]").textContent    = yen(total);
+  document.querySelector("[data-cart-items]").innerHTML = items.length
+    ? items.map((item) => `
+        <div class="cart-item">
+          <div class="cart-thumb">${art(item.product.shape)}</div>
+          <div>
+            <h3>${item.product.name}</h3>
+            <p>${yen(item.product.price)} × ${item.quantity}点</p>
+          </div>
+          <div class="item-controls">
+            <button type="button" data-cart-dec="${item.id}">−</button>
+            <span>${item.quantity}</span>
+            <button type="button" data-cart-inc="${item.id}">＋</button>
+          </div>
+        </div>`).join("")
+    : `<p style="padding:24px 0;color:var(--mist);font-size:14px">カートは空です。お気に入りの特等席を探してみてください。</p>`;
+}
+
+/* ── モーダル ── */
+function openModal(id) {
+  modalProduct = products.find((p) => p.id === id);
+  if (!modalProduct) return;
+  modalQty = 1;
+  document.querySelector("[data-modal-art]").innerHTML           = art(modalProduct.shape);
+  document.querySelector("[data-modal-category]").textContent    = modalProduct.categoryLabel;
+  document.querySelector("[data-modal-name]").textContent        = modalProduct.name;
+  document.querySelector("[data-modal-price]").textContent       = yen(modalProduct.price);
+  document.querySelector("[data-modal-description]").textContent = modalProduct.detail;
+  document.querySelector("[data-modal-qty]").textContent         = modalQty;
+  document.querySelector("[data-modal-colors]").innerHTML        = modalProduct.colors
+    .map((c) => `<span class="color-chip" style="background:${c}"></span>`).join("");
+  document.querySelector("[data-modal]").hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeModal() {
+  document.querySelector("[data-modal]").hidden = true;
+  document.body.style.overflow = "";
+}
+
+/* ── カートドロワー ── */
+function openCart() {
+  cartDrawer.classList.add("open");
+  cartDrawer.setAttribute("aria-hidden", "false");
+  scrim.hidden = false;
+}
+function closeCart() {
+  cartDrawer.classList.remove("open");
+  cartDrawer.setAttribute("aria-hidden", "true");
+  scrim.hidden = true;
+  setTimeout(() => {
+    const current = cartDrawer.querySelector("[data-cart-step]:not([hidden])");
+    if (current && current.dataset.cartStep === "4") {
+      cart = []; memberData = null;
+      saveCart(); renderCart();
+    }
+    showStep(1);
+  }, 300);
+}
+
+function showStep(n) {
+  document.querySelectorAll("[data-cart-step]").forEach((el) => {
+    el.hidden = el.dataset.cartStep !== String(n);
+  });
+  document.querySelectorAll(".step-dot").forEach((dot) => {
+    const s = parseInt(dot.dataset.step);
+    dot.classList.toggle("active", s === n);
+    dot.classList.toggle("done", s < n);
+  });
+  const ind = document.querySelector("[data-step-indicator]");
+  if (ind) ind.hidden = n === 4;
+}
+
 function renderConfirmStep() {
   const { items, subtotal, discount, shipping, total } = calcTotals();
-
-  // 商品一覧
   document.querySelector("[data-confirm-items]").innerHTML = items.map((item) => `
     <div class="cart-item confirm-item">
       <div class="cart-thumb">${art(item.product.shape)}</div>
-      <div>
-        <h3>${item.product.name}</h3>
-        <p>${yen(item.product.price)} × ${item.quantity}点</p>
-      </div>
+      <div><h3>${item.product.name}</h3><p>${yen(item.product.price)} × ${item.quantity}点</p></div>
       <strong>${yen(item.product.price * item.quantity)}</strong>
     </div>`).join("");
-
-  // 合計
   document.querySelector("[data-confirm-subtotal]").textContent = couponApplied ? `${yen(subtotal)} - ${yen(discount)}` : yen(subtotal);
   document.querySelector("[data-confirm-shipping]").textContent = yen(shipping);
   document.querySelector("[data-confirm-total]").textContent    = yen(total);
-
-  // 会員情報サマリー
   if (memberData) {
-    const payLabel = { card:"クレジットカード", paypay:"PayPay", bank:"銀行振込" };
+    const pay = { card: "クレジットカード", paypay: "PayPay", bank: "銀行振込" };
     document.querySelector("[data-confirm-info]").innerHTML = `
       <strong>お届け先・お支払い</strong>
       ${memberData.fullName} 様<br>
-      〒${memberData.postal} ${memberData.address}${memberData.address2 ? ' ' + memberData.address2 : ''}<br>
-      ${memberData.phone}<br>
-      ${memberData.email}<br>
-      お支払い: ${payLabel[memberData.payment] || memberData.payment}
-    `;
+      〒${memberData.postal} ${memberData.address}${memberData.address2 ? " " + memberData.address2 : ""}<br>
+      ${memberData.phone} / ${memberData.email}<br>
+      お支払い: ${pay[memberData.payment] || memberData.payment}`;
   }
 }
 
-/* ── event delegation ── */
+/* ── イベント ── */
 document.addEventListener("click", (e) => {
   if (e.target.matches("[data-scrim]")) { closeCart(); return; }
   const t = e.target.closest("button, a");
   if (!t) return;
-
   if (t.matches("[data-add]"))         addToCart(t.dataset.add);
   if (t.matches("[data-detail]"))      openModal(t.dataset.detail);
   if (t.matches("[data-cart-open]"))   openCart();
@@ -295,41 +199,25 @@ document.addEventListener("click", (e) => {
   if (t.matches("[data-qty-plus]"))    { modalQty++; document.querySelector("[data-modal-qty]").textContent = modalQty; }
   if (t.matches("[data-cart-dec]"))    updateQuantity(t.dataset.cartDec, -1);
   if (t.matches("[data-cart-inc]"))    updateQuantity(t.dataset.cartInc, 1);
-
-  // クーポン
   if (t.matches("[data-apply-coupon]")) {
     const inp = document.querySelector('input[name="coupon"]');
     couponApplied = inp.value.trim().toUpperCase() === "SEKISO10";
     inp.value = couponApplied ? "SEKISO10" : "";
     renderCart();
   }
-
-  // ステップ移動ボタン（data-go-step="N"）
   if (t.dataset.goStep) {
     const n = parseInt(t.dataset.goStep);
-    if (n === 2 && !cart.length) return; // カートが空なら進まない
+    if (n === 2 && !cart.length) return;
     showStep(n);
   }
-
-  // 登録済み会員→ステップ2をスキップ
-  if (t.matches("[data-skip-member]")) {
-    renderConfirmStep();
-    showStep(3);
-  }
-
-  // 購入確定
-  if (t.matches("[data-place-order]")) {
-    showStep(4);
-  }
+  if (t.matches("[data-skip-member]")) { renderConfirmStep(); showStep(3); }
+  if (t.matches("[data-place-order]")) showStep(4);
 });
 
-// ステップ2フォーム送信→ステップ3へ
 document.querySelector("[data-member-form]").addEventListener("submit", (e) => {
   e.preventDefault();
-  const fd = new FormData(e.currentTarget);
-  memberData = Object.fromEntries(fd.entries());
-  renderConfirmStep();
-  showStep(3);
+  memberData = Object.fromEntries(new FormData(e.currentTarget).entries());
+  renderConfirmStep(); showStep(3);
 });
 
 document.querySelectorAll("[data-filter]").forEach((btn) => {
@@ -341,8 +229,7 @@ document.querySelectorAll("[data-filter]").forEach((btn) => {
 });
 
 document.querySelector("[data-contact-form]").addEventListener("submit", (e) => {
-  e.preventDefault();
-  e.currentTarget.reset();
+  e.preventDefault(); e.currentTarget.reset();
   document.querySelector("[data-contact-note]").textContent = "お問い合わせありがとうございます。実運用では自動返信メールを送信します。";
 });
 
@@ -352,9 +239,15 @@ window.addEventListener("scroll", () => {
 
 const observer = new IntersectionObserver(
   (entries) => entries.forEach((en) => { if (en.isIntersecting) en.target.classList.add("visible"); }),
-  { threshold: 0.1 }
+  { threshold: 0, rootMargin: "0px 0px -40px 0px" }
 );
 document.querySelectorAll(".section-reveal").forEach((el) => observer.observe(el));
+
+requestAnimationFrame(() => {
+  document.querySelectorAll(".section-reveal").forEach((el) => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("visible");
+  });
+});
 
 renderProducts();
 renderCart();
