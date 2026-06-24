@@ -250,7 +250,9 @@ details p { font-size: 13px; color: var(--mist); margin-top: 10px; line-height: 
 /* ── Cart drawer ── */
 .cart-drawer {
   position: fixed; z-index: 300; top: 0; right: 0;
-  width: min(540px, 100vw); height: 100dvh;
+  width: min(540px, 100vw);
+  height: 100vh;    /* フォールバック */
+  height: 100dvh;   /* モバイル対応 */
   display: grid;
   grid-template-rows: auto 1fr; /* インジケーター + ステップ */
   background: var(--milk);
@@ -283,6 +285,7 @@ details p { font-size: 13px; color: var(--mist); margin-top: 10px; line-height: 
 [data-cart-step][hidden] { display: none !important; }
 [data-cart-step]:not([hidden]) {
   display: flex; flex-direction: column;
+  height: 100%; /* gridの1fr分をしっかり使う */
   overflow: hidden; min-height: 0;
 }
 
