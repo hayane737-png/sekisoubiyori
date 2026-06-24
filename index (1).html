@@ -53,18 +53,49 @@
             <a class="button secondary" href="#about">ブランドについて</a>
           </div>
         </div>
+        <!-- ============================================
+          【写真エリア①】ヒーロー（トップ画面）
+          3枚の写真カードが重なって表示されます。
+          現在はSVGイラストのプレースホルダーです。
+
+          ▼ 写真に差し替える方法:
+          各 <div class="layer-card"> の中の <svg>...</svg> を
+          下記のように <img> タグに置き換えてください。
+
+          例）
+          <img src="images/hero-tape-stand.jpg"
+               alt="マステスタンドの写真"
+               style="width:100%;height:100%;object-fit:cover;" />
+
+          ▼ 推奨する写真の内容:
+          c-back  → 商品の雰囲気写真（後ろに下がって少しぼかして見える）
+          c-mid   → メイン商品のライフスタイル写真（最も目立つカード）
+          c-front → 別の商品アップ写真（手前に重なるカード）
+
+          ▼ 推奨サイズ: 横600px × 縦720px 以上（縦長）
+          ============================================ -->
         <div class="hero-visual" aria-label="積層日和の商品イメージ">
+
+          <!-- 背面カード（薄く見える・雰囲気写真） -->
           <div class="layer-card c-back" aria-hidden="true">
+            <!-- ↓ ここをimgタグに差し替え（例: images/hero-bg.jpg） -->
             <svg viewBox="0 0 320 300"><rect width="320" height="300" fill="#f7ede6"/><rect x="108" y="80" width="26" height="130" rx="13" fill="#edd9cd" stroke="#c5a08a" stroke-width="2"/><rect x="148" y="60" width="26" height="150" rx="13" fill="#e6d9ce" stroke="#c5a08a" stroke-width="2"/><rect x="188" y="95" width="26" height="115" rx="13" fill="#fff0e8" stroke="#c5a08a" stroke-width="2"/><rect x="88" y="210" width="144" height="14" rx="7" fill="#e8ddd4"/></svg>
           </div>
+
+          <!-- 中央カード（メインビジュアル・最も目立つ） -->
           <div class="layer-card c-mid">
+            <!-- ↓ ここをimgタグに差し替え（例: images/hero-main.jpg） -->
             <svg viewBox="0 0 320 300"><rect width="320" height="300" fill="#f5ece3"/><ellipse cx="160" cy="234" rx="84" ry="14" fill="rgba(119,87,67,.1)"/><path d="M98 105c0-28 23-51 51-51h22c28 0 51 23 51 51v109H98z" fill="#fff8f2" stroke="#b99a86" stroke-width="2.5"/><circle cx="134" cy="152" r="26" fill="#edd9cd" stroke="#b99a86" stroke-width="2"/><circle cx="186" cy="152" r="26" fill="#e6e0d2" stroke="#b99a86" stroke-width="2"/><circle cx="134" cy="152" r="10" fill="#fffdfb"/><circle cx="186" cy="152" r="10" fill="#fffdfb"/><path d="M118 213h84M124 98h72" stroke="#b99a86" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
             <span class="layer-label">masking tape stand</span>
           </div>
+
+          <!-- 前面カード（手前に重なるサブ写真） -->
           <div class="layer-card c-front">
+            <!-- ↓ ここをimgタグに差し替え（例: images/hero-sub.jpg） -->
             <svg viewBox="0 0 320 300"><rect width="320" height="300" fill="#f9f1eb"/><ellipse cx="160" cy="234" rx="84" ry="14" fill="rgba(119,87,67,.1)"/><rect x="92" y="178" width="136" height="58" rx="22" fill="#fff8f2" stroke="#b99a86" stroke-width="2.5"/><rect x="118" y="86" width="28" height="116" rx="14" fill="#faf8f5" stroke="#b99a86" stroke-width="2.5"/><rect x="174" y="62" width="28" height="140" rx="14" fill="#edd9cd" stroke="#b99a86" stroke-width="2.5"/><path d="M114 207h92M138 181v54M183 181v54" stroke="#b99a86" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
             <span class="layer-label">lip holder</span>
           </div>
+
         </div>
       </section>
 
@@ -93,7 +124,29 @@
       </section>
 
       <section class="concept section-reveal" id="concept">
+        <!-- ============================================
+          【写真エリア②】Conceptセクション（左側）
+          現在は棚のイラストが表示されています。
+
+          ▼ 写真に差し替える方法:
+          <div class="concept-visual"> の中身を
+          下記のように <img> タグに置き換えてください。
+
+          例）
+          <div class="concept-visual">
+            <img src="images/concept.jpg"
+                 alt="商品を並べた棚の写真"
+                 style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+
+          ▼ 推奨する写真の内容:
+          商品を棚や机に並べたライフスタイル写真。
+          全体的に明るく・余白のある構図がブランドに合います。
+
+          ▼ 推奨サイズ: 横800px × 縦900px 以上（やや縦長）
+          ============================================ -->
         <div class="concept-visual" aria-hidden="true">
+          <!-- ↓ 写真を入れる場合はこの中身をimgタグに差し替え -->
           <div class="shelf-items">
             <div class="shelf-item si-a"></div>
             <div class="shelf-item si-b"></div>
@@ -152,9 +205,38 @@
           <h2 id="instagram-title">@sekisoubiyori</h2>
           <a class="text-link" href="https://www.instagram.com/sekisoubiyori/" target="_blank" rel="noreferrer">フォローする</a>
         </div>
-        <div class="insta-grid" aria-label="Instagram投稿イメージ">
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+        <!-- ============================================
+          【写真エリア③】Instagramフィード（6枚）
+          現在はグラデーションのプレースホルダーです。
+
+          ▼ 写真に差し替える方法:
+          各 <span></span> を <a> タグ＋ <img> に置き換えてください。
+
+          例）
+          <a href="https://www.instagram.com/p/投稿ID/" target="_blank">
+            <img src="images/insta-01.jpg"
+                 alt="マステスタンドを机に飾った様子"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:8px;" />
+          </a>
+
+          ▼ 推奨する写真の内容（6枚）:
+          1枚目: マステスタンドの商品写真
+          2枚目: リップホルダーの使用シーン
+          3枚目: リングレストのライフスタイル写真
+          4枚目: 商品の並べた俯瞰写真
+          5枚目: 制作風景・3Dプリンターの様子
+          6枚目: パッケージ・発送の様子
+
+          ▼ 推奨サイズ: 正方形 600px × 600px 以上
+          ============================================ -->
+        <div class="insta-grid" aria-label="Instagram投稿">
+          <!-- ↓ 各spanをaタグ+imgに差し替え（6枚分） -->
+          <span></span><!-- 1枚目 -->
+          <span></span><!-- 2枚目 -->
+          <span></span><!-- 3枚目 -->
+          <span></span><!-- 4枚目 -->
+          <span></span><!-- 5枚目 -->
+          <span></span><!-- 6枚目 -->
         </div>
       </section>
 

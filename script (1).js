@@ -11,6 +11,26 @@ let memberData = null;
 
 const yen = (v) => `¥${v.toLocaleString("ja-JP")}`;
 
+// ============================================
+// 【写真エリア⑤】商品イラスト → 写真への切り替え方法
+//
+// 現在 art() 関数がSVGイラストを返しています。
+// products.js で各商品に image プロパティを追加したら
+// 下記のように art() 関数を修正してください。
+//
+// 修正例）
+// const art = (shape, imageUrl) => {
+//   if (imageUrl) {
+//     return `<img src="${imageUrl}" alt="商品写真"
+//              style="width:100%;height:100%;object-fit:cover;" />`;
+//   }
+//   // imageUrlがない場合はSVGイラストにフォールバック
+//   ... 現在のSVGコード ...
+// };
+//
+// ※ art() を呼び出している箇所（renderProducts, renderCart等）も
+//   art(p.shape, p.image) のように引数を追加する必要があります。
+// ============================================
 const art = (shape) => {
   const common = `<rect width="320" height="300" fill="#f4ede5"/><ellipse cx="160" cy="234" rx="84" ry="14" fill="rgba(119,87,67,.10)"/>`;
   const line = `stroke="#b99a86" stroke-width="2.5" stroke-linecap="round" fill="none"`;
